@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue </title>
+    <style>
+        [v-cloak]{
+           display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app">  
+        <ol>
+            <li v-for="movie in formatedMovies">{{movie}}</li>
+        </ol>
+
+        <button v-on:click="addMovie">Add Movie</button>
+
+        <h1>{{message | uppercase(true)}}</h1>
+
+        <p v-bind:title="message | uwfirst">{{message}}</p>
+
+        <p>{{message  | uwfirst | removeSpaces}}</p>
+       
+       
+    </div>
+
+    
+    <script src="app.vue"></script>
+        <script> 
+                new Vue({
+                    el: '#app',
+                    data: {
+                        movies:[
+                            {name:'HIT',year:2020},
+                            {name:'Evaru',year:2019},
+                            {name:'Race',year:2018},
+                        ],
+                        message:'hello world!'
+                        
+                    },
+                    filters:{
+                        uwfirst(value){
+                            if(!value){
+                                return '';
+                            }
+
+                            var parts = value.toString().split(' ');
+
+                            var uppercaseWords = parts.map(function(word){
+                               return word.charAt(0).toUpperCase() + word.slice(1);
+                            });
+
+                            return uppercaseWords.join(' ');
+                        },
+                        uppercase(value,onlyFirstCharacter){
+                            if(!value){
+                                return '';
+                            }
+                            value =  value.toString();
+
+                            if(onlyFirstCharacter){
+                                return value.charAt(0).toUpperCase() + value.slice(1);
+                            }else{
+                                return value.toUpperCase();
+                            }
+
+                        },
+                        removeSpaces(value){
+                           if(!value){
+                               return '';
+                           } 
+
+                           return value.toString().replace(/ /g, '')
+                        }
+                    },
+                    methods:{
+                        addMovie(){
+                            this.movies.push({
+                               name:"Fast and furious",
+                               year:2001
+                            });
+                        }
+                    },
+
+                    computed:{
+                        formatedMovies(){
+                            return this.movies.map(function(movie){
+                                return movie.name + '(' + movie.year + ')';
+                            });
+                        }
+                    },
+
+                    watch:{
+                        movies(movies){
+                            var newMovie = movies[movies.length -1];
+                            alert(newMovie.name + ' Form ' + newMovie.year + ' was just added');
+                        }
+                    }
+
+                  
+                    
+                })
+             
+           
+
+        </script>
+</body>
+</html>
